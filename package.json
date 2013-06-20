@@ -1,0 +1,40 @@
+{
+  "name": "extasy",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "Extend function inspired by coffeescript, typescript and google closure inheritance patterns.",
+  "tags": [
+    "OOP",
+    "extend",
+    "extends",
+    "class",
+    "inheritance",
+    "inherits"
+  ],
+  "author": {
+    "name": "Andrew Griffiths",
+    "email": "mail@andrewgriffithsonline.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:techjacker/extasy.git"
+  },
+  "engines": [
+    "node >= 0.6.0"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "tap ./test",
+    "docs": "yuidoc -o ./docs ./lib"
+  },
+  "dependencies": {
+    "underscore": ">=1.4"
+  },
+  "devDependencies": {
+    "tap": ">=0.4",
+    "underscore": ">=1.4",
+    "yuidocjs": "~0.3.44",
+    "live-reload": "~0.2.0",
+    "tap-test-helpers": "0.0.3"
+  }
+}

@@ -1,0 +1,30 @@
+{
+    "project": {},
+    "files": {
+        "lib/main.js": {
+            "name": "lib/main.js",
+            "modules": {
+                "Extasy": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "Extasy": {
+            "name": "Extasy",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "lib/main.js",
+            "line": 7,
+            "description": "The best bits from coffeescript, typescript and google closure's extend methods in a pure js implementation"
+        }
+    },
+    "classes": {},
+    "classitems": [],
+    "warnings": []
+}
