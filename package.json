@@ -25,6 +25,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tap ./test",
+    "autotest": "nodemon -w lib test -x tap",
     "docs": "yuidoc -o ./docs ./lib"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "underscore": ">=1.4",
     "yuidocjs": "~0.3.44",
     "live-reload": "~0.2.0",
-    "tap-test-helpers": "0.0.3"
+    "tap-test-helpers": "0.0.3",
+    "nodemon": "0.7.x"
   }
 }
