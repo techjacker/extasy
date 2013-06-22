@@ -86,24 +86,37 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-var extendAll 		= require(&#x27;./extend-all.js&#x27;),
-	extendStatic    = require(&#x27;./extend-static.js&#x27;),
-	extendCtor 		= require(&#x27;./extend-ctor.js&#x27;);
-	// adds .parent_ property (this.parent_ === this.constructor.prototype)
-	// extendCtor 		= require(&#x27;./parent-property.js&#x27;);
+var _     = require(&#x27;underscore&#x27;);
+var Mixin = require(&#x27;./mixins.js&#x27;);
+
+// adds .parent_ property (this.parent_ === this.constructor.prototype)
+// -&gt; useful for when want to reference class that gave birth to instance
+// -&gt; useless for extend-static extends
+// require(&#x27;./parent-property.js&#x27;);
+
 
 /**
- * The best bits from coffeescript, typescript and google closure&#x27;s extend methods in a pure js implementation
+ * Extend function inspired by coffeescript, typescript and google closure inheritance patterns
  *
  * @module Extasy
  */
-module.exports = extendAll;
+var Extasy = function (child, parent, staticProps) {
 
-// module.exports = {
-// 	extendAll: extendAll,
-// 	extendCtor: extendCtor,
-// 	extendStatic: extendStatic
-// };
+	var multiParents = _.isArray(parent),
+		staticExtend = (multiParents || (parent.constructor === Object.prototype.constructor)),
+		extendFn 	 = staticExtend ? &#x27;./extend-static.js&#x27; : &#x27;./extend-ctor.js&#x27;;
+
+	// allow multiple parents
+	multiParents &amp;&amp; (parent = Mixin.protoMixin(parent));
+
+	// optional copy instance properties from parentCtor to child, eg
+	// parentCtor.name === child.name // only parentCtor.prototype.* copied by default
+	Mixin.staticMethods(child, parent, staticProps);
+
+	return require(extendFn)(child, parent, staticProps);
+};
+
+module.exports = Extasy;
     </pre>
 </div>
 

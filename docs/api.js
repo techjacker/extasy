@@ -8,7 +8,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "Extasy",
             "name": "Extasy",
-            "description": "The best bits from coffeescript, typescript and google closure's extend methods in a pure js implementation"
+            "description": "Extend function inspired by coffeescript, typescript and google closure inheritance patterns"
         }
     ]
 } };

@@ -25,8 +25,9 @@
   "main": "index.js",
   "scripts": {
     "test": "tap ./test",
+    "docs": "yuidoc -o ./docs ./lib",
     "autotest": "nodemon -w lib test -x tap",
-    "docs": "yuidoc -o ./docs ./lib"
+    "autodocs": "nodemon -w lib test -x yuidoc -o ./docs ./lib"
   },
   "dependencies": {
     "underscore": ">=1.4"

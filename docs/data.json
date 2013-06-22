@@ -20,8 +20,8 @@
             "namespaces": {},
             "tag": "module",
             "file": "lib/main.js",
-            "line": 7,
-            "description": "The best bits from coffeescript, typescript and google closure's extend methods in a pure js implementation"
+            "line": 10,
+            "description": "Extend function inspired by coffeescript, typescript and google closure inheritance patterns"
         }
     },
     "classes": {},
