@@ -41,11 +41,11 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="../classes/Extasy.html">Extasy</a></li>
+            
             </ul>
 
             <ul id="api-modules" class="apis modules">
-            
-                <li><a href="../modules/Extasy.html">Extasy</a></li>
             
             </ul>
         </div>
@@ -86,35 +86,197 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-var _     = require(&#x27;underscore&#x27;);
-var Mixin = require(&#x27;./mixins.js&#x27;);
-
 // adds .parent_ property (this.parent_ === this.constructor.prototype)
 // -&gt; useful for when want to reference class that gave birth to instance
 // -&gt; useless for extend-static extends
 // require(&#x27;./parent-property.js&#x27;);
-
+var _     = require(&#x27;underscore&#x27;);
+var Mixin = require(&#x27;./mixins.js&#x27;);
+var extCtor = require(&#x27;./extend-ctor.js&#x27;);
+var extStatic = require(&#x27;./extend-static.js&#x27;);
 
 /**
- * Extend function inspired by coffeescript, typescript and google closure inheritance patterns
+ * @class Extasy
+ * @constructor
+ * Extend function inspired by coffeescript, typescript and google closure inheritance patterns.
  *
- * @module Extasy
+ * @example
+ * ## Features
+ *
+ * ### Accepts Constructor or Static Class Parents
+ * Parent can be either a constructor or static class (ie constructor functions or object literals).
+
+ * #### Constructor Parents
+ * Parent&#x27;s prototype methods are placed on child&#x27;s prototype (static methods if parent is object literal).
+ *
+ * 	function Child() {};
+ * 	function Parent() {};
+ * 	extend(Child, Parent);
+ * 	var ChildInst = new Child();
+ * 	assert(ChildInst.super_ === Parent.prototype);
+ * 	assert(ChildInst.hello === &#x27;world&#x27;);
+ *
+ * #### Static Parents
+ * 	function Child() {};
+ * 	var Parent = {};
+ * 	extend(Child, Parent);
+ * 	assert(Child.super_ === Parent);
+ * 	var ChildInst = new Child();
+ * 	assert(ChildInst.constructor.super_ === Parent);
+ *
+ * #### Multiple Parents
+ *
+ * 	function Child() {};
+ * 	function Parent() {};
+ * 	Parent.prototype.kinky = function () { return &#x27;yes, &#x27; + this.menage; };
+ * 	function Parent2() {};
+ * 	var Parent3 = {menage: &#x27;a trois&#x27;};
+
+ * 	// inherit
+ * 	extend(Child, [Parent, Parent2, Parent3]);
+ * 	var ChildInst = new Child();
+
+ * 	assert(Child.prototype.kinky === Parent.prototype.kinky);
+ * 	assert(ChildInst.constructor.prototype.kinky === Parent.prototype.kinky);
+ * 	assert(Child.kinky() === &#x27;yes, a trois&#x27;);
+ * 	assert(ChildInst.kinky() === &#x27;yes, a trois&#x27;);
+ *
+ *
+ *
+ *
+ * ### Copies Constuctor* Parent&#x27;s Instance Methods &amp; Properties
+ * Parent&#x27;s instance methods are set as child instance methods if parent is a constructor class.
+ * Does not do this for static classes because their &#x27;instance&#x27; methods are put on the prototype
+ *
+ * 	function Child() {};
+ * 	function Parent() {};
+ * 	Parent.prototype.random = &#x27;randomness&#x27;;
+ * 	Parent.random = &#x27;random&#x27;;
+ * 	Parent.bar = &#x27;bar&#x27;;
+ * 	extend(Child, Parent);
+ *
+ * 	// differences child class vs instance
+ * 	var ChildInst = new Child();
+ * 	assert(Child.bar === Parent.bar);
+ * 	assert(Child.super_ === undefined);
+ * 	assert(ChildInst.super_ !== undefined);
+ * 	assert(Child.random === Parent.random);
+ * 	assert(Child.random === &#x27;random&#x27;);
+ * 	assert(ChildInst.constructor.random === &#x27;random&#x27;);
+ * 	assert(ChildInst.super_.random === &#x27;randomness&#x27;);
+ *
+ *
+ *
+ *
+ * ### Overloading
+ *
+ * ####  Overloading Constructor Class Parent
+ *	function Child() {};
+ *	function Parent() {};
+ *	Parent.prototype.foo = function () { return &#x27;father&#x27;; };
+ *	extend(Child, Parent);
+
+ *	// extend the protoype after extending or else will fail...
+ *	Child.prototype.foo = function () {
+ *		return &#x27;you are my &#x27; + this.super_.foo();
+ *	}
+
+ *	// initialise
+ *	var ChildInst = new Child();
+ *	assert(ChildInst.foo() === &#x27;you are my father&#x27;);
+
+ *	// overload
+ *	ChildInst.foo = function () {
+ *		return &#x27;you WERE my &#x27; + this.super_.foo();
+ *	}
+ *	assert(ChildInst.foo() === &#x27;you WERE my father&#x27;);
+ *
+ *
+ * #### Overloading Static Class Parent
+ *	function Child() {};
+ *	var Parent = {foo: function () { return &#x27;father&#x27;; }};
+ *	extend(Child, Parent);
+
+ *	// can&#x27;t overload thru prototype - need to do thru instance
+ *	assert(Child.super_.foo === Parent.foo);
+ *	assert(Child.prototype.foo === Parent.foo);
+ *	Child.foo = function () {
+ *		return &#x27;you are my &#x27; + this.super_.foo();
+ *	}
+
+ *	// overloading instance
+ *	var ChildInst = new Child();
+ *	assert(Child.foo() === &#x27;you are my father&#x27;);
+ *	assert(ChildInst.constructor.foo() === &#x27;you are my father&#x27;);
+ *
+ *
+ * #### Overloading Multiple Parents
+ *
+ *	function Child() {};
+ *	function Parent() {};
+ *	Parent.prototype.kinky = function () { return &#x27;yes, &#x27; + this.menage; };
+ *	function Parent2() {};
+ *	var Parent3 = {menage: &#x27;a trois&#x27;};
+
+ *	// inherit
+ *	extend(Child, [Parent, Parent2, Parent3]);
+ *	var ChildInst = new Child();
+
+ *	// can&#x27;t overload thru prototype - need to do thru instance
+ *	assert(Child.super_.kinky === Parent.prototype.kinky);
+ *	assert(Child.prototype.kinky === Parent.prototype.kinky);
+
+ *	// class overloading
+ *	Child.kinky = function () {
+ *		return &#x27;Q: Is my parent kinky? A: &#x27; + this.super_.kinky();
+ *	};
+ *	assert(Child.kinky() === &#x27;Q: Is my parent kinky? A: yes, a trois&#x27;);
+ *	assert(ChildInst.kinky() !== &#x27;Q: Is my parent kinky? A: yes, a trois&#x27;);
+
+ *	// instance overloading
+ *	var ChildInstOverload = new Child();
+ *	t.equal(ChildInstOverload.kinky(),&#x27;yes, a trois&#x27;);
+ *	ChildInstOverload.kinky = function () {
+ *		return &#x27;Q: Is my class\&#x27;s parent kinky? A: &#x27; + this.constructor.super_.kinky();
+ *	};
+ *	t.equal(ChildInstOverload.kinky(),&#x27;Q: Is my class\&#x27;s parent kinky? A: yes, a trois&#x27;);
+ *
+ *
+ *
+ * @param {Constructor} child Constructor function for child class that you want to create
+ *
+ * @param {Class|Array} parent A single class or an array of classes that you want the child to inherit from. The paren(t&#x27;s/ts&#x27;) methods will be put on the child&#x27;s prototype. If the parent is a dynamic class (ie uses a constructor function) then the parent&#x27;s prototype methods will be put on the child&#x27;s prototype. If the parent is a static class (ie an object literal) then it&#x27;s static methods will be put on the child&#x27;s prototype. If an array of classes is passed in then these will be flattened (ie a single parent class combining all the methods to be inherited will be created) before applying to the child&#x27;s prototype.
+ *
+ * @param  {[Object]} staticProps Optional instance methods to give the class when instantiated (won&#x27;t be put on proto). By default the paren(t&#x27;s/ts&#x27;) instance methods are applied to the child as instance methods
+ *
+ * @return {Class} The child class is returned
  */
 var Extasy = function (child, parent, staticProps) {
 
+	if (!(this instanceof Extasy)) {
+		return new Extasy(child, parent, staticProps);
+	}
+
 	var multiParents = _.isArray(parent),
 		staticExtend = (multiParents || (parent.constructor === Object.prototype.constructor)),
-		extendFn 	 = staticExtend ? &#x27;./extend-static.js&#x27; : &#x27;./extend-ctor.js&#x27;;
+		extendFn 	 = staticExtend ? &#x27;extStatic&#x27; : &#x27;extCtor&#x27;;
 
 	// allow multiple parents
-	multiParents &amp;&amp; (parent = Mixin.protoMixin(parent));
+	multiParents &amp;&amp; (parent = this.protoMixin(parent));
 
 	// optional copy instance properties from parentCtor to child, eg
 	// parentCtor.name === child.name // only parentCtor.prototype.* copied by default
-	Mixin.staticMethods(child, parent, staticProps);
+	this.staticMethods(child, parent, staticProps);
 
-	return require(extendFn)(child, parent, staticProps);
+	return this[extendFn](child, parent, staticProps);
 };
+
+var multiParents = [Mixin, {
+	extCtor:extCtor,
+	extStatic:extStatic
+}];
+Extasy.prototype = Mixin.protoMixin(multiParents);
+Extasy.prototype.constructor = Extasy;
 
 module.exports = Extasy;
     </pre>

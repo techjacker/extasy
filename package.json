@@ -1,8 +1,8 @@
 {
   "name": "extasy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
-  "description": "Extend function inspired by coffeescript, typescript and google closure inheritance patterns.",
+  "description": "Extend function inspired by YUI, coffeescript, typescript and google closure inheritance patterns.",
   "tags": [
     "OOP",
     "extend",

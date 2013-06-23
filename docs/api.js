@@ -1,15 +1,9 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
-    "classes": [],
-    "modules": [
+    "classes": [
         "Extasy"
     ],
-    "allModules": [
-        {
-            "displayName": "Extasy",
-            "name": "Extasy",
-            "description": "Extend function inspired by coffeescript, typescript and google closure inheritance patterns"
-        }
-    ]
+    "modules": [],
+    "allModules": []
 } };
 });
