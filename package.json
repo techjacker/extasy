@@ -1,6 +1,6 @@
 {
   "name": "extasy",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "description": "Extend function inspired by YUI, coffeescript, typescript and google closure inheritance patterns.",
   "tags": [
@@ -23,21 +23,26 @@
     "node >= 0.6.0"
   ],
   "main": "index.js",
+  "browser": "extasy-browser.js",
   "scripts": {
     "test": "tap ./test",
     "docs": "yuidoc -o ./docs ./lib",
-    "autotest": "nodemon -w lib test -x tap",
-    "autodocs": "nodemon -w lib test -x yuidoc -o ./docs ./lib"
+    "browser": "browserify -s extasy ./lib/main.js > extasy-browser.js",
+    "browser-min": "browserify -s extasy  -t uglifyify ./lib/main.js > extasy-browser.min.js",
+    "browser-min-native": "browserify -s extasy ./lib/main.js | uglifyjs -c > extasy-browser.min.js",
+    "autotest": "nodemon -w lib -w test -x npm test",
+    "gzip": "gzip -c extasy-browser.min.js | wc -c",
+    "autodocs": "nodemon -w lib -w test -x npm run-script docs"
   },
-  "dependencies": {
-    "underscore": ">=1.4"
-  },
+  "dependencies": {},
   "devDependencies": {
     "tap": ">=0.4",
     "underscore": ">=1.4",
     "yuidocjs": "~0.3.44",
     "live-reload": "~0.2.0",
     "tap-test-helpers": "0.0.3",
-    "nodemon": "0.7.x"
+    "nodemon": "0.7.x",
+    "uglifyify": "0.0.1",
+    "browserify": "~2.21.0"
   }
 }

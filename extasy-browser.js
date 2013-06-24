@@ -1,3 +1,5 @@
+(function(e){if("function"==typeof bootstrap)bootstrap("extasy",e);else if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else if("undefined"!=typeof ses){if(!ses.ok())return;ses.makeExtasy=e}else"undefined"!=typeof window?window.extasy=e():global.extasy=e()})(function(){var define,ses,bootstrap,module,exports;
+return (function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
 var Mixin = require('./mixins.js');
 var extCtor = require('./extend-ctor.js');
 var extStatic = require('./extend-static.js');
@@ -192,3 +194,98 @@ Extasy.prototype = Mixin.protoMixin(multiParents);
 Extasy.prototype.constructor = Extasy;
 
 module.exports = Extasy;
+},{"./mixins.js":2,"./extend-ctor.js":3,"./extend-static.js":4}],2:[function(require,module,exports){
+var returnCorrectObj = function (item) {
+	var objLiteral = (item.constructor === Object.prototype.constructor);
+	return objLiteral ? item : item.prototype;
+};
+
+var Mixin = {
+	instancePropsMixin: function(child, parent) {
+		var __hasProp = {}.hasOwnProperty;
+		// copy instance properties from parent to child
+		for (var key in parent) {
+			if (__hasProp.call(parent, key)) {
+				child[key] = parent[key];
+			}
+		}
+		return child;
+	},
+
+	// optional copy instance properties from parentCtor to childCtor, eg
+	// parentCtor.name === childCtor.name // only parentCtor.prototype.* copied by default
+	staticMethods: function (childCtor, parentCtor, staticProps) {
+
+		var validObjLiteral = (staticProps && staticProps.constructor === Object.prototype.constructor);
+
+		Mixin.instancePropsMixin(childCtor, parentCtor);
+
+		validObjLiteral && Mixin.instancePropsMixin(childCtor, staticProps);
+
+		return childCtor;
+	},
+	protoMixin: function(arrayParents) {
+
+		var single = {}, objClass;
+
+		for (var i = arrayParents.length - 1; i >= 0; i--) {
+			objClass = returnCorrectObj(arrayParents[i]);
+			for (var key in objClass) {
+				single[key] = objClass[key];
+			}
+		};
+		// console.log('single', single);
+		// underscore way..
+		// var parentProtos = _.(arrayParents).map(function(parent) {
+		// 	return parent.prototype;
+		// });
+		// _.extend(single, Array.prototype.slice.call(parentProtos));
+
+		// copy instance properties from parent to child
+		return single;
+	}
+};
+
+module.exports = Mixin;
+},{}],4:[function(require,module,exports){
+var extendStatic = function (childCtor, parentStaticClass) {
+
+	childCtor.super_ = parentStaticClass;
+	// console.log('childCtor.super_', childCtor.super_);
+
+	childCtor.prototype = Object.create(parentStaticClass, {
+		constructor: {
+			value: childCtor,
+			enumerable: false,
+			writable: true,
+			configurable: true
+		}
+	});
+	return childCtor;
+};
+
+module.exports = extendStatic;
+},{}],3:[function(require,module,exports){
+var Mixin = require('./mixins.js');
+
+var extendCtor = function (childCtor, parentCtor) {
+
+	var tmp = function() {
+		this.super_ = parentCtor.prototype; // typescript
+		// this.super_ = this.constructor.prototype // works as well
+		// console.log('this.super_', this.super_);
+	};
+	tmp.prototype = parentCtor.prototype;
+	// childCtor.super_  = parentCtor.prototype; // means you have to reference using this.constructor.super_.
+
+	// apply to childCtor
+	childCtor.prototype = new tmp();
+	childCtor.prototype.constructor = childCtor;
+
+	return childCtor;
+};
+
+module.exports = extendCtor;
+},{"./mixins.js":2}]},{},[1])(1)
+});
+;

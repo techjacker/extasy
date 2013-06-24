@@ -86,14 +86,15 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
+var Mixin = require(&#x27;./mixins.js&#x27;);
+var extCtor = require(&#x27;./extend-ctor.js&#x27;);
+var extStatic = require(&#x27;./extend-static.js&#x27;);
+
 // adds .parent_ property (this.parent_ === this.constructor.prototype)
 // -&gt; useful for when want to reference class that gave birth to instance
 // -&gt; useless for extend-static extends
 // require(&#x27;./parent-property.js&#x27;);
-var _     = require(&#x27;underscore&#x27;);
-var Mixin = require(&#x27;./mixins.js&#x27;);
-var extCtor = require(&#x27;./extend-ctor.js&#x27;);
-var extStatic = require(&#x27;./extend-static.js&#x27;);
+
 
 /**
  * @class Extasy
@@ -257,7 +258,7 @@ var Extasy = function (child, parent, staticProps) {
 		return new Extasy(child, parent, staticProps);
 	}
 
-	var multiParents = _.isArray(parent),
+	var multiParents = (parent instanceof Array),
 		staticExtend = (multiParents || (parent.constructor === Object.prototype.constructor)),
 		extendFn 	 = staticExtend ? &#x27;extStatic&#x27; : &#x27;extCtor&#x27;;
 

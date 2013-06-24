@@ -2,11 +2,28 @@
 
 [![Build Status](https://secure.travis-ci.org/techjacker/extasy.png)](http://travis-ci.org/techjacker/extasy)
 
-Extend function inspired by YUI, coffeescript, typescript and google closure inheritance patterns.
+- Extend function inspired by YUI, coffeescript, typescript and google closure inheritance patterns.
+- 2.5k minified (950 bytes gzipped)
+
 
 ### Install
+
+#### Node
+
 ```Shell
 npm install extasy
+```
+
+#### Browser
+
+```HTML
+<script src="extasy-browser.min.js"></script>
+<script>
+	function Child() {};
+	function Parent() {};
+	extasy(Child, Parent);
+    extasy(Child,Parent);
+</script>
 ```
 
 ### Docs
@@ -16,7 +33,7 @@ npm install extasy
 ### Full Example
 
 ```JavaScript
-var extend = require('./lib/main.js');
+var extasy = require('./lib/main.js');
 
 function Parent() {};
 Parent.prototype.foo = function(x, y) {
@@ -25,7 +42,7 @@ Parent.prototype.foo = function(x, y) {
 
 function Child() {};
 // must extend before overwriting prototype methods!
-extend(Child, Parent);
+extasy(Child, Parent);
 Child.prototype.foo = function(x, y) {
 	return 2 + this.super_.foo(x, y);
 };
@@ -49,11 +66,11 @@ console.log('ok');
 
 ## API
 
-#### extend(childConstructor, ParentClass, StaticProps)
+#### extasy(childConstructor, ParentClass, StaticProps)
 
 	function Child() {};
 	function Parent() {};
-	extend(Child, Parent, {
+	extasy(Child, Parent, {
 		iam: 'optional static props'
 	}));
 
@@ -82,7 +99,7 @@ Parent's prototype methods are placed on child's prototype (static methods if pa
 ```JavaScript
 function Child() {};
 function Parent() {};
-extend(Child, Parent);
+extasy(Child, Parent);
 var ChildInst = new Child();
 assert(ChildInst.super_ === Parent.prototype);
 assert(ChildInst.hello === 'world');
@@ -94,7 +111,7 @@ assert(ChildInst.hello === 'world');
 ```JavaScript
 function Child() {};
 var Parent = {};
-extend(Child, Parent);
+extasy(Child, Parent);
 assert(Child.super_ === Parent);
 var ChildInst = new Child();
 assert(ChildInst.constructor.super_ === Parent);
@@ -110,7 +127,7 @@ function Parent2() {};
 var Parent3 = {menage: 'a trois'};
 
 // inherit
-extend(Child, [Parent, Parent2, Parent3]);
+extasy(Child, [Parent, Parent2, Parent3]);
 var ChildInst = new Child();
 
 assert(Child.prototype.kinky === Parent.prototype.kinky);
@@ -130,7 +147,7 @@ function Parent() {};
 Parent.prototype.random = 'randomness';
 Parent.random = 'random';
 Parent.bar = 'bar';
-extend(Child, Parent);
+extasy(Child, Parent);
 // differences child class vs instance
 var ChildInst = new Child();
 assert(Child.bar === Parent.bar);
@@ -149,7 +166,7 @@ assert(ChildInst.super_.random === 'randomness');
 function Child() {};
 function Parent() {};
 Parent.prototype.foo = function () { return 'father'; };
-extend(Child, Parent);
+extasy(Child, Parent);
 
 // extend the protoype after extending or else will fail...
 Child.prototype.foo = function () {
@@ -173,7 +190,7 @@ assert(ChildInst.foo() === 'you WERE my father');
 ```JavaScript
 function Child() {};
 var Parent = {foo: function () { return 'father'; }};
-extend(Child, Parent);
+extasy(Child, Parent);
 
 // can't overload thru prototype - need to do thru instance
 assert(Child.super_.foo === Parent.foo);
@@ -199,7 +216,7 @@ function Parent2() {};
 var Parent3 = {menage: 'a trois'};
 
 // inherit
-extend(Child, [Parent, Parent2, Parent3]);
+extasy(Child, [Parent, Parent2, Parent3]);
 var ChildInst = new Child();
 
 // can't overload thru prototype - need to do thru instance
