@@ -30,16 +30,15 @@
     "browser": "browserify -s extasy ./lib/main.js > extasy-browser.js",
     "browser-min": "browserify -s extasy  -t uglifyify ./lib/main.js > extasy-browser.min.js",
     "browser-min-native": "browserify -s extasy ./lib/main.js | uglifyjs -c > extasy-browser.min.js",
-    "autotest": "nodemon -w lib -w test -x npm test",
+    "autotest": "nodemon -x npm test",
     "gzip": "gzip -c extasy-browser.min.js | wc -c",
-    "autodocs": "nodemon -w lib -w test -x npm run-script docs"
+    "autodocs": "nodemon -x npm run-script docs"
   },
   "dependencies": {},
   "devDependencies": {
     "tap": ">=0.4",
     "underscore": ">=1.4",
     "yuidocjs": "~0.3.44",
-    "live-reload": "~0.2.0",
     "tap-test-helpers": "0.0.3",
     "nodemon": "0.7.x",
     "uglifyify": "0.0.1",
