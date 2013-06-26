@@ -1,6 +1,6 @@
 {
   "name": "extasy",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "description": "Extend function inspired by YUI, coffeescript, typescript and google closure inheritance patterns.",
   "tags": [
@@ -42,6 +42,7 @@
     "tap-test-helpers": "0.0.3",
     "nodemon": "0.7.x",
     "uglifyify": "0.0.1",
-    "browserify": "~2.21.0"
+    "browserify": "~2.21.0",
+    "ecstatic": "~0.4.5"
   }
 }

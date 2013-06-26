@@ -22,7 +22,6 @@ npm install extasy
 	function Child() {};
 	function Parent() {};
 	extasy(Child, Parent);
-    extasy(Child,Parent);
 </script>
 ```
 
