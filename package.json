@@ -1,6 +1,6 @@
 {
   "name": "extasy",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "description": "Extend function inspired by YUI, coffeescript, typescript and google closure inheritance patterns.",
   "tags": [
