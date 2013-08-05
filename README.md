@@ -16,6 +16,14 @@ npm install extasy
 
 #### Browser
 
+```Shell
+component install extasy
+```
+
+```Shell
+bower install extasy
+```
+
 ```HTML
 <script src="extasy-browser.min.js"></script>
 <script>
