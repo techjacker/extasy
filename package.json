@@ -1,6 +1,6 @@
 {
   "name": "extasy",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "license": "MIT",
   "description": "Extend function inspired by YUI, coffeescript, typescript and google closure inheritance patterns.",
   "tags": [
@@ -35,7 +35,7 @@
     "autodocs": "nodemon -x npm run-script docs"
   },
   "dependencies": {
-    "mitsubishi": "~1.0.0"
+    "mitsubishi": "~2.4.0"
   },
   "devDependencies": {
     "tap": ">=0.4",
