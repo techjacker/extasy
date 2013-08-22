@@ -1,10 +1,10 @@
 {
   "name": "extasy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "description": "Extend function inspired by YUI, coffeescript, typescript and google closure inheritance patterns.",
   "keywords": ["OOP", "extend", "extends", "class", "inheritance", "inherits" ],
-  "repo": "techjacker/extasy.git",
+  "repo": "techjacker/extasy",
   "main": "index.js",
   "scripts": [
     "index.js",
@@ -14,6 +14,6 @@
     "lib/parent-property.js"
   ],
   "dependencies": {
-    "techjacker/mitsubishi": "~2.4.0"
+    "techjacker/mitsubishi": "2.4.0"
   }
 }
