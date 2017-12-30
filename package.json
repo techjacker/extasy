@@ -35,16 +35,16 @@
     "autodocs": "nodemon -x npm run-script docs"
   },
   "dependencies": {
-    "mitsubishi": "~2.4.0"
+    "mitsubishi": "2.4.0"
   },
   "devDependencies": {
-    "tap": ">=0.4",
-    "underscore": ">=1.4",
-    "yuidocjs": "~0.3.44",
+    "browserify": "14.5.0",
+    "ecstatic": "3.1.1",
+    "nodemon": "1.14.6",
+    "tap": "11.0.1",
     "tap-test-helpers": "0.0.3",
-    "nodemon": "0.7.x",
-    "uglifyify": "0.0.1",
-    "browserify": "~2.21.0",
-    "ecstatic": "~0.4.5"
+    "uglifyify": "4.0.5",
+    "underscore": "1.8.3",
+    "yuidocjs": "0.10.2"
   }
 }
